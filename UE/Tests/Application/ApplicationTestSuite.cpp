@@ -17,6 +17,7 @@ class ApplicationTestSuite : public Test
 {
 protected:
     const common::PhoneNumber PHONE_NUMBER{112};
+    const common::BtsId BTS_ID{42};
     NiceMock<common::ILoggerMock> loggerMock;
     StrictMock<IBtsPortMock> btsPortMock;
     StrictMock<IUserPortMock> userPortMock;
@@ -59,7 +60,7 @@ ApplicationConnectingTestSuite::ApplicationConnectingTestSuite()
     requestAttachOnSib();
 }
 
-TEST_F(ApplicationConnectingTestSuite, shallCompleteAttacWhenAttachAccepted)
+TEST_F(ApplicationConnectingTestSuite, shallCompleteAttachWhenAttachAccepted)
 {
     EXPECT_CALL(timerPortMock, stopTimer());
     EXPECT_CALL(userPortMock, showConnected());
