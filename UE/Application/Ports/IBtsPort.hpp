@@ -13,6 +13,7 @@ public:
     virtual void handleSib(common::BtsId) = 0;
     virtual void handleAttachAccept() = 0;
     virtual void handleAttachReject() = 0;
+    virtual void handleSMSReceive(uint8_t, std::string) = 0;
 };
 
 class IBtsPort

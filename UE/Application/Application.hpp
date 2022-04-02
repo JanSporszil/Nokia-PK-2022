@@ -28,10 +28,12 @@ public:
     void handleSib(common::BtsId btsId) override;
     void handleAttachAccept() override;
     void handleAttachReject() override;
+    void handleSMSReceive(uint8_t, std::string) override;
 
 private:
     Context context;
     common::PrefixedLogger logger;
+
 
 };
 

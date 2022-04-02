@@ -49,6 +49,12 @@ void BtsPort::handleMessage(BinaryMessage msg)
                 handler->handleAttachReject();
             break;
         }
+        case common::MessageId::Sms:
+        {
+            uint8_t mode = reader.readNumber<std::uint8_t>();
+            std::string content = reader.readRemainingText();
+            handler->handleSMSReceive(mode, content);
+        }
         default:
             logger.logError("unknow message: ", msgId, ", from: ", from);
 
