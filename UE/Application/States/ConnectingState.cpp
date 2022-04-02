@@ -20,7 +20,7 @@ void ConnectingState::handleAttachAccept()
 
 void ConnectingState::handleAttachReject()
 {
-    context.timer.startTimer();
+    context.timer.stopTimer();
     context.setState<NotConnectedState>();
 }
 

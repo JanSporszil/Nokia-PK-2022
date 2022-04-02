@@ -1,3 +1,4 @@
+#pragma once
 #include "IEventsHandler.hpp"
 #include "Logger/PrefixedLogger.hpp"
 #include "Context.hpp"
