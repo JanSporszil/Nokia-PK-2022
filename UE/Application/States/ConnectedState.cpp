@@ -8,4 +8,9 @@ ConnectedState::ConnectedState(Context &context)
 {
 }
 
+void ConnectedState::handleSMSReceive(uint8_t mode, std::string content)
+{
+    context.smsDB.addReceivedSms(content);
+}
+
 }

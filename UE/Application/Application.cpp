@@ -41,4 +41,11 @@ void Application::handleAttachReject()
     context.state->handleAttachReject();
 }
 
+void Application::handleSMSReceive(uint8_t mode, std::string content)
+{
+    context.state->handleSMSReceive(mode, content);
+}
+
+
+
 }
