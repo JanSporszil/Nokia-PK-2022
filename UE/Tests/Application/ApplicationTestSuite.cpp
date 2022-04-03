@@ -34,10 +34,26 @@ protected:
 
 struct ApplicationNotConnectedTestSuite : ApplicationTestSuite
 {
-    void requestAttachOnSib();
+    void goIntoConnectingState();
 };
 
-void ApplicationNotConnectedTestSuite::requestAttachOnSib()
+struct ApplicationConnectingTestSuite : ApplicationNotConnectedTestSuite
+{
+    ApplicationConnectingTestSuite();
+    void goIntoConnectedState();
+};
+
+struct ApplicationConnectedTestSuite : ApplicationConnectingTestSuite
+{
+    ApplicationConnectedTestSuite();
+};
+
+ApplicationConnectingTestSuite::ApplicationConnectingTestSuite()
+{
+    goIntoConnectingState();
+}
+
+void ApplicationNotConnectedTestSuite::goIntoConnectingState()
 {
     EXPECT_CALL(btsPortMock, sendAttachRequest(BTS_ID));
     EXPECT_CALL(timerPortMock, startTimer(_));
@@ -45,26 +61,26 @@ void ApplicationNotConnectedTestSuite::requestAttachOnSib()
     objectUnderTest.handleSib(BTS_ID);
 }
 
-TEST_F(ApplicationNotConnectedTestSuite, shallRequestAttachOnSib)
+ApplicationConnectedTestSuite::ApplicationConnectedTestSuite()
 {
-    requestAttachOnSib();
+    goIntoConnectedState();
 }
 
-struct ApplicationConnectingTestSuite : ApplicationNotConnectedTestSuite
-{
-    ApplicationConnectingTestSuite();
-};
-
-ApplicationConnectingTestSuite::ApplicationConnectingTestSuite()
-{
-    requestAttachOnSib();
-}
-
-TEST_F(ApplicationConnectingTestSuite, shallCompleteAttachWhenAttachAccepted)
+void ApplicationConnectingTestSuite::goIntoConnectedState()
 {
     EXPECT_CALL(timerPortMock, stopTimer());
     EXPECT_CALL(userPortMock, showConnected());
     objectUnderTest.handleAttachAccept();
+}
+
+TEST_F(ApplicationNotConnectedTestSuite, shallRequestAttachOnSib)
+{
+    goIntoConnectingState();
+}
+
+TEST_F(ApplicationConnectingTestSuite, shallCompleteAttachWhenAttachAccepted)
+{
+    goIntoConnectedState();
 }
 
 TEST_F(ApplicationConnectingTestSuite, shallFailAttachWhenAttachRejected)
@@ -80,5 +96,11 @@ TEST_F(ApplicationConnectingTestSuite, shallFailAttachOnTimeout)
     objectUnderTest.handleTimeout();
 }
 
+
+TEST_F(ApplicationConnectedTestSuite, shallHandleDisconnected)
+{
+    EXPECT_CALL(userPortMock, showNotConnected());
+    objectUnderTest.handleDisconnected();
+}
 
 }
