@@ -12,6 +12,7 @@ public:
 
     // IBtsEventsHandler interface
 public:
+    void handleDisconnected() override;
     void handleSMSReceive(uint8_t mode, std::string content) override;
 };
 
