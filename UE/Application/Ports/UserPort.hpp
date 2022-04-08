@@ -18,21 +18,26 @@ public:
 
     void showNotConnected() override;
     void showConnecting() override;
-    void showConnected() override;
-    void viewSmsList() override;
+    void showConnected(IUeGui::Callback acceptCallback, IUeGui::Callback declineCallback) override;
+    void showSmsList(IUeGui::Callback acceptCallback, IUeGui::Callback declineCallback) override;
     virtual SmsDB &getSmsDB() override;
+    int getCurrentMenuIndex();
 
 private:
     common::PrefixedLogger logger;
     IUeGui& gui;
+    IUeGui::Callback acceptStateCallback;
+
     common::PhoneNumber phoneNumber;
     IUserEventsHandler* handler = nullptr;
     SmsDB smsDB;
 
-    void onAcceptClicked(IUeGui::IListViewMode& menu);
+    int currentMenuIndex = -1;
+
+    void onAcceptClickedWhenMenuActivated(IUeGui::IListViewMode& menu);
     void showSms(IUeGui::IListViewMode& menu);
-    void showSmsList() override;
     void viewSms(Sms sms);
+    void viewSmsList(IUeGui::Callback acceptCallback, IUeGui::Callback declineCallback) override;
 };
 
 }

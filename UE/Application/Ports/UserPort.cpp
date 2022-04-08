@@ -32,16 +32,18 @@ void UserPort::showConnecting()
     gui.showConnecting();
 }
 
-void UserPort::showConnected()
+void UserPort::showConnected(IUeGui::Callback acceptCallback, IUeGui::Callback declineCallback)
 {
     IUeGui::IListViewMode& menu = gui.setListViewMode();
     menu.clearSelectionList();
     menu.addSelectionListItem("Compose SMS", "");
     menu.addSelectionListItem("View SMS", "");
-    gui.setAcceptCallback(std::bind(&UserPort::onAcceptClicked, this, std::ref(menu)));
+    this->acceptStateCallback = acceptCallback;
+    gui.setAcceptCallback(std::bind(&UserPort::onAcceptClickedWhenMenuActivated, this, std::ref(menu)));
+    gui.setRejectCallback(declineCallback);
 }
 
-void UserPort::viewSmsList()
+void UserPort::viewSmsList(IUeGui::Callback acceptCallback, IUeGui::Callback declineCallback)
 {
     IUeGui::IListViewMode& menu = gui.setListViewMode();
     menu.clearSelectionList();
@@ -50,7 +52,8 @@ void UserPort::viewSmsList()
         menu.addSelectionListItem(sms.getContent(), "");
     }
 
-    gui.setAcceptCallback(std::bind(&UserPort::showSms, this, std::ref(menu)));
+    gui.setAcceptCallback(std::bind(&UserPort::onAcceptClickedWhenMenuActivated, this, std::ref(menu)));
+    gui.setRejectCallback(declineCallback);
 }
 
 SmsDB &UserPort::getSmsDB()
@@ -58,9 +61,14 @@ SmsDB &UserPort::getSmsDB()
     return smsDB;
 }
 
-void UserPort::showSmsList()
+int UserPort::getCurrentMenuIndex()
 {
-    viewSmsList();
+    return currentMenuIndex;
+}
+
+void UserPort::showSmsList(IUeGui::Callback acceptCallback, IUeGui::Callback declineCallback)
+{
+    viewSmsList(acceptCallback, declineCallback);
 }
 
 void UserPort::viewSms(Sms sms)
@@ -69,19 +77,20 @@ void UserPort::viewSms(Sms sms)
     text.setText(sms.getContent());
 }
 
-void UserPort::onAcceptClicked(IUeGui::IListViewMode& menu)
+void UserPort::onAcceptClickedWhenMenuActivated(IUeGui::IListViewMode& menu)
 {
     auto selection = menu.getCurrentItemIndex();
-
     if (!selection.first)
     {
-        return;
+        currentMenuIndex = -1;
     }
 
-    if (selection.second == 1)
+    else
     {
-        showSmsList();
+        currentMenuIndex = selection.second;
     }
+
+    acceptStateCallback();
 }
 
 void UserPort::showSms(IUeGui::IListViewMode &menu)
