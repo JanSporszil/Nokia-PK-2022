@@ -54,8 +54,19 @@ void BtsPort::handleMessage(BinaryMessage msg)
         case common::MessageId::Sms:
         {
             uint8_t mode = reader.readNumber<std::uint8_t>();
-            std::string content = reader.readRemainingText();
-            handler->handleSMSReceive(mode, content);
+
+            if (mode == 0)
+            {
+                std::string content = reader.readRemainingText();
+                handler->handleSMSReceive(mode, content);
+            }
+
+            else
+            {
+                /* TODO */
+                logger.logError("Received unknown SMS mode", mode);
+            }
+
         }
         default:
             logger.logError("unknow message: ", msgId, ", from: ", from);
