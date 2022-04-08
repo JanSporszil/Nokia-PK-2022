@@ -4,8 +4,15 @@
 
 struct Sms
 {
+private:
     std::string content;
     common::PhoneNumber from;
     common::PhoneNumber to;
-    bool isViewed;
+    bool viewed;
+
+public:
+    Sms();
+    void markAsViewed();
+    bool isViewed();
+    const std::string &getContent() const;
 };

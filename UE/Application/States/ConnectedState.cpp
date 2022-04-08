@@ -17,7 +17,7 @@ void ConnectedState::handleDisconnected()
 
 void ConnectedState::handleSMSReceive(uint8_t mode, std::string content)
 {
-    context.smsDB.addReceivedSms(content);
+    context.user.getSmsDB().addReceivedSms(content);
 }
 
 }

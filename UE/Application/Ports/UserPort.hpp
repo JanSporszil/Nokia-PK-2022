@@ -4,6 +4,7 @@
 #include "Logger/PrefixedLogger.hpp"
 #include "IUeGui.hpp"
 #include "Messages/PhoneNumber.hpp"
+#include <Utils/SmsDB.hpp>
 
 namespace ue
 {
@@ -18,12 +19,20 @@ public:
     void showNotConnected() override;
     void showConnecting() override;
     void showConnected() override;
+    void viewSmsList() override;
+    virtual SmsDB &getSmsDB() override;
 
 private:
     common::PrefixedLogger logger;
     IUeGui& gui;
     common::PhoneNumber phoneNumber;
     IUserEventsHandler* handler = nullptr;
+    SmsDB smsDB;
+
+    void onAcceptClicked(IUeGui::IListViewMode& menu);
+    void showSms(IUeGui::IListViewMode& menu);
+    void showSmsList() override;
+    void viewSms(Sms sms);
 };
 
 }
