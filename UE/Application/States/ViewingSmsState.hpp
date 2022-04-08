@@ -5,13 +5,13 @@
 namespace ue
 {
 
-class ViewSmsListState : public ConnectedState
+class ViewingSmsState : public ConnectedState
 {
 protected:
     void onAcceptClicked();
     void onDeclineClicked();
 public:
-    ViewSmsListState(Context& context);
+    ViewingSmsState(Context& context, int smsIndex);
 };
 
 }
