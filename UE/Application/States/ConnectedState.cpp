@@ -9,10 +9,9 @@ namespace ue
 ConnectedState::ConnectedState(Context &context)
     : BaseState(context, "ConnectedState")
 {
-    context.user.showConnected(
-                std::bind(&ConnectedState::onAcceptClicked, this),
-                std::bind(&ConnectedState::onDeclineClicked, this)
-                );
+    context.user.setAcceptCallback(std::bind(&ConnectedState::onAcceptClicked, this));
+    context.user.setRejectCallback(std::bind(&ConnectedState::onDeclineClicked, this));
+    context.user.showConnected();
 }
 
 void ConnectedState::onAcceptClicked()

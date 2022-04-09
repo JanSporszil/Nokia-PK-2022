@@ -18,10 +18,14 @@ public:
 
     void showNotConnected() override;
     void showConnecting() override;
-    void showConnected(IUeGui::Callback acceptCallback, IUeGui::Callback declineCallback) override;
-    void showSmsList(IUeGui::Callback acceptCallback, IUeGui::Callback declineCallback) override;
-    virtual SmsDB &getSmsDB() override;
-    int getCurrentMenuIndex();
+    void showConnected() override;
+    void showSmsList() override;
+    void viewSmsList() override;
+    void showSms(int index) override;
+    SmsDB &getSmsDB() override;
+    int getCurrentMenuIndex() override;
+    void setAcceptCallback(IUeGui::Callback acceptCallback) override;
+    void setRejectCallback(IUeGui::Callback rejectCallback) override;
 
 private:
     common::PrefixedLogger logger;
@@ -35,9 +39,7 @@ private:
     int currentMenuIndex = -1;
 
     void onAcceptClickedWhenMenuActivated(IUeGui::IListViewMode& menu);
-    void showSms(IUeGui::IListViewMode& menu);
-    void viewSms(Sms sms);
-    void viewSmsList(IUeGui::Callback acceptCallback, IUeGui::Callback declineCallback) override;
+    void viewSms(int index);
 };
 
 }

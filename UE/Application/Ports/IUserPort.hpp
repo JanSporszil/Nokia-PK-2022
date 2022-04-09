@@ -18,11 +18,14 @@ public:
 
     virtual void showNotConnected() = 0;
     virtual void showConnecting() = 0;
-    virtual void showConnected(IUeGui::Callback acceptCallback, IUeGui::Callback declineCallback) = 0;
+    virtual void showConnected() = 0;
     virtual void viewSmsList() = 0;
-    virtual void showSmsList(IUeGui::Callback acceptCallback, IUeGui::Callback declineCallback) = 0;
+    virtual void showSmsList() = 0;
+    virtual void showSms(int index) = 0;
     virtual SmsDB& getSmsDB() = 0;
     virtual int getCurrentMenuIndex() = 0;
+    virtual void setAcceptCallback(IUeGui::Callback acceptCallback) = 0;
+    virtual void setRejectCallback(IUeGui::Callback rejectCallback) = 0;
 };
 
 }

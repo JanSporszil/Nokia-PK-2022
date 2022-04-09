@@ -8,8 +8,8 @@ namespace ue
 class ViewSmsListState : public ConnectedState
 {
 protected:
-    void onAcceptClicked();
-    void onDeclineClicked();
+    void onAcceptClicked() override;
+    void onDeclineClicked() override;
 public:
     ViewSmsListState(Context& context);
 };

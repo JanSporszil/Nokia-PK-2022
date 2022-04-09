@@ -11,8 +11,8 @@ public:
     ConnectedState(Context& context);
 
 protected:
-    void onAcceptClicked();
-    void onDeclineClicked();
+    virtual void onAcceptClicked();
+    virtual void onDeclineClicked();
 public:
     void handleDisconnected() override;
     void handleSMSReceive(uint8_t mode, std::string content) override;

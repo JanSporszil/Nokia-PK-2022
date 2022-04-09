@@ -7,10 +7,7 @@ namespace ue
 ViewSmsListState::ViewSmsListState(Context &context)
     : ConnectedState(context)
 {
-    context.user.showSmsList(
-                std::bind(&ViewSmsListState::onAcceptClicked, this),
-                std::bind(&ViewSmsListState::onDeclineClicked, this)
-                );
+    context.user.showSmsList();
 }
 
 void ViewSmsListState::onAcceptClicked()
