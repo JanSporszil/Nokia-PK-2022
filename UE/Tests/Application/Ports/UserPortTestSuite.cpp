@@ -17,7 +17,7 @@ protected:
     const common::PhoneNumber PHONE_NUMBER{112};
     NiceMock<common::ILoggerMock> loggerMock;
     StrictMock<IUserEventsHandlerMock> handlerMock;
-    StrictMock<IUeGuiMock> guiMock;
+    NiceMock<IUeGuiMock> guiMock;
     StrictMock<IListViewModeMock> listViewModeMock;
 
     UserPort objectUnderTest{loggerMock, guiMock, PHONE_NUMBER};
