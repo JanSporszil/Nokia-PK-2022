@@ -13,3 +13,4 @@ googletest/googletest/generated/
 *.a
 *.o
 *_autogen
+*.autosave

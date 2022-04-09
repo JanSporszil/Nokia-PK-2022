@@ -10,7 +10,9 @@ class ConnectedState : public BaseState
 public:
     ConnectedState(Context& context);
 
-    // IBtsEventsHandler interface
+protected:
+    virtual void onAcceptClicked();
+    virtual void onDeclineClicked();
 public:
     void handleDisconnected() override;
     void handleSMSReceive(uint8_t mode, std::string content) override;

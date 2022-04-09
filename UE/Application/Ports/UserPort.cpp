@@ -1,5 +1,6 @@
 #include "UserPort.hpp"
 #include "UeGui/IListViewMode.hpp"
+#include "UeGui/ITextMode.hpp"
 
 namespace ue
 {
@@ -37,6 +38,77 @@ void UserPort::showConnected()
     menu.clearSelectionList();
     menu.addSelectionListItem("Compose SMS", "");
     menu.addSelectionListItem("View SMS", "");
+    gui.setAcceptCallback(std::bind(&UserPort::onAcceptClickedWhenMenuActivated, this, std::ref(menu)));
+}
+
+void UserPort::viewSmsList()
+{
+    IUeGui::IListViewMode& menu = gui.setListViewMode();
+    menu.clearSelectionList();
+    for (auto& sms : smsDB.getSmsList())
+    {
+        menu.addSelectionListItem(sms.getContent(), "");
+    }
+
+    gui.setAcceptCallback(std::bind(&UserPort::onAcceptClickedWhenMenuActivated, this, std::ref(menu)));
+}
+
+SmsDB &UserPort::getSmsDB()
+{
+    return smsDB;
+}
+
+int UserPort::getCurrentMenuIndex()
+{
+    return currentMenuIndex;
+}
+
+void UserPort::setAcceptCallback(IUeGui::Callback acceptCallback)
+{
+    this->acceptStateCallback = acceptCallback;
+    gui.setAcceptCallback(acceptCallback);
+}
+
+void UserPort::setRejectCallback(IUeGui::Callback rejectCallback)
+{
+    gui.setRejectCallback(rejectCallback);
+}
+
+void UserPort::showSmsList()
+{
+    viewSmsList();
+}
+
+void UserPort::showSms(int index)
+{
+    viewSms(index);
+}
+
+void UserPort::viewSms(int index)
+{
+    auto sms = smsDB.retrieveSms(index);
+    IUeGui::ITextMode& text = gui.setViewTextMode();
+
+    if (sms.has_value())
+    {
+        text.setText(sms.value().getContent());
+    }
+}
+
+void UserPort::onAcceptClickedWhenMenuActivated(IUeGui::IListViewMode& menu)
+{
+    auto selection = menu.getCurrentItemIndex();
+    if (!selection.first)
+    {
+        currentMenuIndex = -1;
+    }
+
+    else
+    {
+        currentMenuIndex = selection.second;
+    }
+
+    acceptStateCallback();
 }
 
 }

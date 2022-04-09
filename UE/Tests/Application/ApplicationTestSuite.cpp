@@ -20,7 +20,7 @@ protected:
     const common::BtsId BTS_ID{42};
     NiceMock<common::ILoggerMock> loggerMock;
     StrictMock<IBtsPortMock> btsPortMock;
-    StrictMock<IUserPortMock> userPortMock;
+    NiceMock<IUserPortMock> userPortMock;
     StrictMock<ITimerPortMock> timerPortMock;
 
     Expectation expectNotConnected = EXPECT_CALL(userPortMock, showNotConnected());
