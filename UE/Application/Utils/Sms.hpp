@@ -16,6 +16,7 @@ public:
     void markAsViewed();
     bool isViewed();
     void markAsFailed();
+    const std::string getTitle() const;
     const std::string &getContent() const;
 
 };

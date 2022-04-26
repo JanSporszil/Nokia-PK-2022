@@ -19,3 +19,8 @@ const std::string &Sms::getContent() const
 {
     return content;
 }
+
+const std::string Sms::getTitle() const
+{
+    return common::to_string(from) + " -> " + common::to_string(to);
+}
