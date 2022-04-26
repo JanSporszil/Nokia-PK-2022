@@ -26,6 +26,8 @@ public:
     int getCurrentMenuIndex() override;
     void setAcceptCallback(IUeGui::Callback acceptCallback) override;
     void setRejectCallback(IUeGui::Callback rejectCallback) override;
+    IUeGui::ISmsComposeMode& showComposeSms() override;
+
 
 private:
     common::PrefixedLogger logger;

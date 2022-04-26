@@ -111,4 +111,14 @@ void UserPort::onAcceptClickedWhenMenuActivated(IUeGui::IListViewMode& menu)
     acceptStateCallback();
 }
 
+IUeGui::ISmsComposeMode& UserPort::showComposeSms(){
+    return gui.setSmsComposeMode();
 }
+
+
+
+
+}
+
+
+

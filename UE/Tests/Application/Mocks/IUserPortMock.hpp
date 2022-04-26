@@ -2,6 +2,7 @@
 
 #include <gmock/gmock.h>
 #include "Ports/IUserPort.hpp"
+#include "IUeGui.hpp"
 
 namespace ue
 {
@@ -30,6 +31,7 @@ public:
     MOCK_METHOD(int, getCurrentMenuIndex, (), (final));
     MOCK_METHOD(void, setAcceptCallback, (IUeGui::Callback), (final));
     MOCK_METHOD(void, setRejectCallback, (IUeGui::Callback), (final));
+    MOCK_METHOD(IUeGui::ISmsComposeMode&, showComposeSms, (), (final));
 };
 
 }

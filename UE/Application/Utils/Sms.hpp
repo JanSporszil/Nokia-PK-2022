@@ -9,10 +9,13 @@ private:
     common::PhoneNumber from;
     common::PhoneNumber to;
     bool viewed;
+    bool failed;
 
 public:
-    Sms();
+    Sms(std::string , common::PhoneNumber , common::PhoneNumber , bool = false, bool = false);
     void markAsViewed();
     bool isViewed();
+    void markAsFailed();
     const std::string &getContent() const;
+
 };

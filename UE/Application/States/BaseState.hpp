@@ -20,7 +20,8 @@ public:
     void handleAttachAccept() override;
     void handleAttachReject() override;
     void handleDisconnected() override;
-    void handleSMSReceive(uint8_t, std::string) override;
+    void handleSMSReceive(uint8_t mode, std::string content, common::PhoneNumber from, common::PhoneNumber to) override;
+    void handleFailedSms() override;
 protected:
     Context& context;
     common::PrefixedLogger logger;

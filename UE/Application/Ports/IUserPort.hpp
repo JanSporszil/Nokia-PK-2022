@@ -26,6 +26,8 @@ public:
     virtual int getCurrentMenuIndex() = 0;
     virtual void setAcceptCallback(IUeGui::Callback acceptCallback) = 0;
     virtual void setRejectCallback(IUeGui::Callback rejectCallback) = 0;
+    virtual IUeGui::ISmsComposeMode& showComposeSms() = 0;
+
 };
 
 }

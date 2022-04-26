@@ -13,9 +13,10 @@ private:
     std::vector<Sms> smsList;
 public:
     SmsDB();
-    void addReceivedSms(std::string);
+    void addSmsToDB(std::string, common::PhoneNumber, common::PhoneNumber, bool = false);
     const std::vector<Sms> &getSmsList();
-    std::optional<Sms> retrieveSms(int index);
+    std::optional<Sms> retrieveSms(int);
+    void markLastAsFailed();
 };
 
 }
