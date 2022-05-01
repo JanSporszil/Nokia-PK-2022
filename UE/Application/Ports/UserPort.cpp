@@ -47,7 +47,7 @@ void UserPort::viewSmsList()
     menu.clearSelectionList();
     for (auto& sms : smsDB.getSmsList())
     {
-        menu.addSelectionListItem(sms.getContent(), "");
+        menu.addSelectionListItem(sms.getTitle(), "");
     }
 
     gui.setAcceptCallback(std::bind(&UserPort::onAcceptClickedWhenMenuActivated, this, std::ref(menu)));
@@ -111,4 +111,14 @@ void UserPort::onAcceptClickedWhenMenuActivated(IUeGui::IListViewMode& menu)
     acceptStateCallback();
 }
 
+IUeGui::ISmsComposeMode& UserPort::showComposeSms(){
+    return gui.setSmsComposeMode();
 }
+
+
+
+
+}
+
+
+

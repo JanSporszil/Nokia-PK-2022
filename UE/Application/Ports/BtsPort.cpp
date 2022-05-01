@@ -58,7 +58,7 @@ void BtsPort::handleMessage(BinaryMessage msg)
             if (mode == 0)
             {
                 std::string content = reader.readRemainingText();
-                handler->handleSMSReceive(mode, content);
+                handler->handleSMSReceive(mode, content, from, to);
             }
 
             else
@@ -66,7 +66,17 @@ void BtsPort::handleMessage(BinaryMessage msg)
                 /* TODO */
                 logger.logError("Received unknown SMS mode", mode);
             }
+            break;
+        }
+        case common::MessageId::UnknownRecipient:
+        {
+            common::MessageId failedMessageId = reader.readMessageId();
+            if(failedMessageId == common::MessageId::Sms)
+            {
+                handler->handleFailedSms();
 
+            }
+            break;
         }
         default:
             logger.logError("unknow message: ", msgId, ", from: ", from);
@@ -91,5 +101,34 @@ void BtsPort::sendAttachRequest(common::BtsId btsId)
 
 
 }
+
+void BtsPort::sendSms(common::PhoneNumber to, std::string message, int mode)
+{
+    logger.logDebug("sending sms: ", to, message, mode);
+    common::OutgoingMessage msg{common::MessageId::Sms,
+                                phoneNumber,
+                                to};
+    msg.writeNumber( static_cast<uint8_t>(mode));
+    switch (mode) {
+    case 0:
+        {
+            msg.writeText(message);
+        }
+        break;
+    default:
+        {
+        logger.logError("Sending sms: unknown mode");
+        }
+        break;
+    }
+    transport.sendMessage(msg.getMessage());
+
+}
+
+common::PhoneNumber BtsPort::getMyPhoneNumber()
+{
+    return phoneNumber;
+}
+
 
 }

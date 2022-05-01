@@ -21,5 +21,12 @@ void ViewSmsListState::onDeclineClicked()
     context.setState<ConnectedState>();
 }
 
+void ViewSmsListState::handleSMSReceive(uint8_t mode, std::string content, common::PhoneNumber from, common::PhoneNumber to)
+{
+    ConnectedState::handleSMSReceive(mode, content, from, to);
+    context.setState<ViewSmsListState>();
+}
+
+
 
 }

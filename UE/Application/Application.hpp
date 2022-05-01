@@ -29,7 +29,8 @@ public:
     void handleAttachAccept() override;
     void handleAttachReject() override;
     void handleDisconnected() override;
-    void handleSMSReceive(uint8_t, std::string) override;
+    void handleSMSReceive(uint8_t, std::string, common::PhoneNumber, common::PhoneNumber) override;
+    void handleFailedSms() override;
 
 private:
     Context context;

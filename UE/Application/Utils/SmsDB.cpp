@@ -1,12 +1,15 @@
 #include "SmsDB.hpp"
 ue::SmsDB::SmsDB()
 {
-    smsList.push_back(Sms());
 }
 
-void ue::SmsDB::addReceivedSms(std::string content)
+void ue::SmsDB::addSmsToDB(
+        std::string content,
+        common::PhoneNumber phoneNumberFrom,
+        common::PhoneNumber phoneNumberTo,
+        bool viewed)
 {
-
+    smsList.push_back(Sms{content, phoneNumberFrom, phoneNumberTo, viewed});
 }
 
 const std::vector<Sms> &ue::SmsDB::getSmsList()
@@ -23,4 +26,15 @@ std::optional<Sms> ue::SmsDB::retrieveSms(int index)
 
     smsList[index].markAsViewed();
     return smsList[index];
+}
+
+void ue::SmsDB::markLastAsFailed()
+{
+    if( smsList.empty() )
+    {
+        return;
+    }
+
+    smsList.back().markAsFailed();
+
 }

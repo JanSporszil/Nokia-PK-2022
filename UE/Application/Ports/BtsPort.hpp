@@ -15,7 +15,10 @@ public:
     void start(IBtsEventsHandler& handler);
     void stop();
 
+
     void sendAttachRequest(common::BtsId) override;
+    void sendSms(common::PhoneNumber to, std::string message, int mode) override;
+    common::PhoneNumber getMyPhoneNumber() override;
 
 private:
     void handleMessage(BinaryMessage msg);

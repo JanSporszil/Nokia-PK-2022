@@ -1,4 +1,5 @@
 #include "ConnectedState.hpp"
+#include "SendingSmsState.hpp"
 #include "NotConnectedState.hpp"
 #include "ViewSmsListState.hpp"
 #include "IUeGui.hpp"
@@ -18,10 +19,15 @@ void ConnectedState::onAcceptClicked()
 {
     int currentMenuIndex = context.user.getCurrentMenuIndex();
 
-    if (currentMenuIndex == 1)
+    if (currentMenuIndex == 0)
+    {
+        context.setState<SendingSmsState>();
+    }
+    else if (currentMenuIndex == 1)
     {
         context.setState<ViewSmsListState>();
     }
+
 }
 
 void ConnectedState::onDeclineClicked()
@@ -29,14 +35,19 @@ void ConnectedState::onDeclineClicked()
     context.logger.logInfo("Decline has been clicked");
 }
 
+void ConnectedState::handleFailedSms()
+{
+    context.user.getSmsDB().markLastAsFailed();
+}
+
 void ConnectedState::handleDisconnected()
 {
     context.setState<NotConnectedState>();
 }
 
-void ConnectedState::handleSMSReceive(uint8_t mode, std::string content)
+void ConnectedState::handleSMSReceive(uint8_t mode, std::string content, common::PhoneNumber from, common::PhoneNumber to)
 {
-    context.user.getSmsDB().addReceivedSms(content);
+    context.user.getSmsDB().addSmsToDB(content, from, to);
 }
 
 }

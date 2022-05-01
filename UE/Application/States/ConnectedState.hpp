@@ -9,13 +9,15 @@ class ConnectedState : public BaseState
 {
 public:
     ConnectedState(Context& context);
+    void handleDisconnected() override;
+    void handleSMSReceive(uint8_t mode, std::string content, common::PhoneNumber from, common::PhoneNumber to) override;
+
 
 protected:
     virtual void onAcceptClicked();
     virtual void onDeclineClicked();
-public:
-    void handleDisconnected() override;
-    void handleSMSReceive(uint8_t mode, std::string content) override;
+    void handleFailedSms() override;
+
 };
 
 }
