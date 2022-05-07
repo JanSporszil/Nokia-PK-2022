@@ -17,6 +17,9 @@ public:
     virtual void handleDisconnected() = 0;
     virtual void handleSMSReceive(uint8_t, std::string, common::PhoneNumber, common::PhoneNumber) = 0;
     virtual void handleFailedSms() = 0;
+    virtual void handleCallDrop() = 0;
+    virtual void handleUnknownCallNumber() = 0;
+    virtual void handleCallAccepted() = 0;
 
 };
 
@@ -28,6 +31,8 @@ public:
     virtual common::PhoneNumber getMyPhoneNumber() = 0;
     virtual void sendSms(common::PhoneNumber, std::string, int) = 0;
     virtual void sendAttachRequest(common::BtsId) = 0;
+    virtual void sendCallRequest(common::PhoneNumber) = 0;
+    virtual void sendDropCall(common::PhoneNumber) = 0;
 };
 
 }

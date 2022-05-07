@@ -27,6 +27,9 @@ public:
     virtual void setAcceptCallback(IUeGui::Callback acceptCallback) = 0;
     virtual void setRejectCallback(IUeGui::Callback rejectCallback) = 0;
     virtual IUeGui::ISmsComposeMode& showComposeSms() = 0;
+    virtual IUeGui::IDialMode& showDialMode() = 0;
+    virtual IUeGui::ICallMode& showCallMode() = 0;
+    virtual IUeGui::ITextMode& showAlertMode() = 0;
 
 };
 

@@ -3,6 +3,7 @@
 #include "NotConnectedState.hpp"
 #include "ViewSmsListState.hpp"
 #include "IUeGui.hpp"
+#include "DialingNumberState.hpp"
 
 namespace ue
 {
@@ -27,7 +28,10 @@ void ConnectedState::onAcceptClicked()
     {
         context.setState<ViewSmsListState>();
     }
-
+    else if (currentMenuIndex == 2)
+    {
+        context.setState<DialingNumberState>();
+    }
 }
 
 void ConnectedState::onDeclineClicked()
@@ -49,5 +53,6 @@ void ConnectedState::handleSMSReceive(uint8_t mode, std::string content, common:
 {
     context.user.getSmsDB().addSmsToDB(content, from, to);
 }
+
 
 }

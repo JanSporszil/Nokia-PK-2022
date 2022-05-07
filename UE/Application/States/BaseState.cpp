@@ -50,4 +50,19 @@ void BaseState::handleFailedSms()
     logger.logError("Unexpected: handleFailedSms");
 }
 
+void BaseState::handleCallDrop()
+{
+    logger.logError("Unexpected: handleCallDrop");
+}
+
+void BaseState::handleUnknownCallNumber()
+{
+    logger.logError("Unexpected: handleUnknownCallNumber");
+}
+
+void BaseState::handleCallAccepted()
+{
+    logger.logError("Unexpected: handleCallAccepted");
+}
+
 }

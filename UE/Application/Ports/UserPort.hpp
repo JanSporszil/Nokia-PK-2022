@@ -27,7 +27,9 @@ public:
     void setAcceptCallback(IUeGui::Callback acceptCallback) override;
     void setRejectCallback(IUeGui::Callback rejectCallback) override;
     IUeGui::ISmsComposeMode& showComposeSms() override;
-
+    IUeGui::IDialMode& showDialMode() override;
+    IUeGui::ICallMode& showCallMode() override;
+    IUeGui::ITextMode& showAlertMode() override;
 
 private:
     common::PrefixedLogger logger;

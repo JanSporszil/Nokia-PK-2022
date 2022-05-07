@@ -31,6 +31,9 @@ public:
     void handleDisconnected() override;
     void handleSMSReceive(uint8_t, std::string, common::PhoneNumber, common::PhoneNumber) override;
     void handleFailedSms() override;
+    void handleCallDrop() override;
+    void handleUnknownCallNumber() override;
+    void handleCallAccepted() override;
 
 private:
     Context context;
