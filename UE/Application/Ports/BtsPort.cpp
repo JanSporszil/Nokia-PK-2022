@@ -74,8 +74,21 @@ void BtsPort::handleMessage(BinaryMessage msg)
             if(failedMessageId == common::MessageId::Sms)
             {
                 handler->handleFailedSms();
-
             }
+            if(failedMessageId == common::MessageId::CallRequest)
+            {
+                handler->handleUnknownCallNumber();
+            }
+            break;
+        }
+        case common::MessageId::CallDropped:
+        {
+            handler->handleCallDrop();
+            break;
+        }
+        case common::MessageId::CallAccepted:
+        {
+            handler->handleCallAccepted();
             break;
         }
         default:
@@ -125,9 +138,28 @@ void BtsPort::sendSms(common::PhoneNumber to, std::string message, int mode)
 
 }
 
+void BtsPort::sendCallRequest(common::PhoneNumber to)
+{
+    logger.logDebug("sending call request: ", to);
+    common::OutgoingMessage msg{common::MessageId::CallRequest,
+                                phoneNumber,
+                                to};
+    msg.writeNumber( static_cast<uint8_t>(0));
+    transport.sendMessage(msg.getMessage());
+}
+
 common::PhoneNumber BtsPort::getMyPhoneNumber()
 {
     return phoneNumber;
+}
+
+void BtsPort::sendDropCall(common::PhoneNumber to)
+{
+    logger.logDebug("sending drop call: ", to);
+    common::OutgoingMessage msg{common::MessageId::CallDropped,
+                                phoneNumber,
+                                to};
+    transport.sendMessage(msg.getMessage());
 }
 
 

@@ -22,6 +22,10 @@ public:
     void handleDisconnected() override;
     void handleSMSReceive(uint8_t mode, std::string content, common::PhoneNumber from, common::PhoneNumber to) override;
     void handleFailedSms() override;
+    void handleCallDrop() override;
+    void handleUnknownCallNumber() override;
+    void handleCallAccepted() override;
+
 protected:
     Context& context;
     common::PrefixedLogger logger;

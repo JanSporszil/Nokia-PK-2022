@@ -38,6 +38,7 @@ void UserPort::showConnected()
     menu.clearSelectionList();
     menu.addSelectionListItem("Compose SMS", "");
     menu.addSelectionListItem("View SMS", "");
+    menu.addSelectionListItem("Call", "");
     gui.setAcceptCallback(std::bind(&UserPort::onAcceptClickedWhenMenuActivated, this, std::ref(menu)));
 }
 
@@ -111,11 +112,24 @@ void UserPort::onAcceptClickedWhenMenuActivated(IUeGui::IListViewMode& menu)
     acceptStateCallback();
 }
 
-IUeGui::ISmsComposeMode& UserPort::showComposeSms(){
+IUeGui::ISmsComposeMode &UserPort::showComposeSms(){
     return gui.setSmsComposeMode();
 }
 
+IUeGui::IDialMode &UserPort::showDialMode()
+{
+    return gui.setDialMode();
+}
 
+IUeGui::ICallMode &UserPort::showCallMode()
+{
+    return gui.setCallMode();
+}
+
+IUeGui::ITextMode &UserPort::showAlertMode()
+{
+    return gui.setAlertMode();
+}
 
 
 }

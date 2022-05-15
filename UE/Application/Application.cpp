@@ -56,8 +56,20 @@ void Application::handleFailedSms()
     context.state->handleFailedSms();
 }
 
+void Application::handleCallDrop()
+{
+    context.state->handleCallDrop();
+}
 
+void Application::handleUnknownCallNumber()
+{
+    context.state->handleUnknownCallNumber();
+}
 
+void Application::handleCallAccepted()
+{
+    context.state->handleCallAccepted();
+}
 
 
 }
