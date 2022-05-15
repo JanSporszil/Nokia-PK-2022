@@ -38,6 +38,7 @@ void MakingCallState::handleTimeout()
 
 void MakingCallState::handleCallAccepted()
 {
+    context.timer.stopTimer();
     context.setState<TalkingState>(phoneNumber);
 }
 

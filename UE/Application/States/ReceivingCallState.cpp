@@ -15,6 +15,7 @@ ReceivingCallState::ReceivingCallState(Context &context, common::PhoneNumber pho
 void ReceivingCallState::onAcceptClicked()
 {
     context.bts.sendCallAccepted(phoneNumber);
+    context.timer.stopTimer();
     context.setState<TalkingState>(phoneNumber);
 }
 

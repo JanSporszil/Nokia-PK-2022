@@ -22,6 +22,7 @@ public:
     virtual void handleCallAccepted() = 0;
     virtual void handleCallRequest(common::PhoneNumber) = 0;
     virtual void handleUnknownCallAccept() = 0;
+    virtual void handleCallTalkReceive(const std::string&, common::PhoneNumber) = 0;
 
 };
 
@@ -36,6 +37,7 @@ public:
     virtual void sendCallRequest(common::PhoneNumber) = 0;
     virtual void sendDropCall(common::PhoneNumber) = 0;
     virtual void sendCallAccepted(common::PhoneNumber) = 0;
+    virtual void sendCallTalk(const std::string&, common::PhoneNumber) = 0;
 };
 
 }

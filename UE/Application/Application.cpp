@@ -81,5 +81,10 @@ void Application::handleUnknownCallAccept()
     context.state->handleUnknownCallAccept();
 }
 
+void Application::handleCallTalkReceive(const std::string& content, common::PhoneNumber from)
+{
+    context.state->handleCallTalkReceive(content, from);
+}
+
 
 }

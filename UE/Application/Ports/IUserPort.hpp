@@ -24,6 +24,7 @@ public:
     virtual void showSms(int index) = 0;
     virtual SmsDB& getSmsDB() = 0;
     virtual int getCurrentMenuIndex() = 0;
+    virtual void clearCallMode() = 0;
     virtual void setAcceptCallback(IUeGui::Callback acceptCallback) = 0;
     virtual void setRejectCallback(IUeGui::Callback rejectCallback) = 0;
     virtual IUeGui::ISmsComposeMode& showComposeSms() = 0;

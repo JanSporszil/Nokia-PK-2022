@@ -1,6 +1,7 @@
 #include "UserPort.hpp"
 #include "UeGui/IListViewMode.hpp"
 #include "UeGui/ITextMode.hpp"
+#include "UeGui/ICallMode.hpp"
 
 namespace ue
 {
@@ -64,6 +65,13 @@ int UserPort::getCurrentMenuIndex()
     return currentMenuIndex;
 }
 
+void UserPort::clearCallMode()
+{
+    IUeGui::ICallMode& callMode = gui.setCallMode();
+    callMode.clearIncomingText();
+    callMode.clearOutgoingText();
+}
+
 void UserPort::setAcceptCallback(IUeGui::Callback acceptCallback)
 {
     this->acceptStateCallback = acceptCallback;
@@ -118,6 +126,7 @@ IUeGui::ISmsComposeMode &UserPort::showComposeSms(){
 
 IUeGui::IDialMode &UserPort::showDialMode()
 {
+    clearCallMode();
     return gui.setDialMode();
 }
 

@@ -24,6 +24,7 @@ public:
     void showSms(int index) override;
     SmsDB &getSmsDB() override;
     int getCurrentMenuIndex() override;
+    void clearCallMode() override;
     void setAcceptCallback(IUeGui::Callback acceptCallback) override;
     void setRejectCallback(IUeGui::Callback rejectCallback) override;
     IUeGui::ISmsComposeMode& showComposeSms() override;
