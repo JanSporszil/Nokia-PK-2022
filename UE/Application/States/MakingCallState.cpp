@@ -10,7 +10,7 @@ MakingCallState::MakingCallState(Context &context, common::PhoneNumber phoneNumb
     alertMode.setText("Calling " + common::to_string(phoneNumber) + "...");
     context.bts.sendCallRequest(phoneNumber);
     using namespace std::chrono_literals;
-    context.timer.startTimer(60s);
+    context.timer.startTimer(30s);
 }
 
 void MakingCallState::onAcceptClicked()

@@ -25,6 +25,8 @@ public:
     void handleCallDrop() override;
     void handleUnknownCallNumber() override;
     void handleCallAccepted() override;
+    void handleCallRequest(common::PhoneNumber) override;
+    void handleUnknownCallAccept() override;
 
 protected:
     Context& context;

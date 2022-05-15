@@ -16,4 +16,9 @@ void AbstractCallingState::handleCallDrop()
     context.setState<ConnectedState>();
 }
 
+void AbstractCallingState::handleCallRequest(common::PhoneNumber number)
+{
+    logger.logError("Received call request, but UE is already in call state");
+}
+
 }

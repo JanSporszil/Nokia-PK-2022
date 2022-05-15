@@ -4,6 +4,7 @@
 #include "ViewSmsListState.hpp"
 #include "IUeGui.hpp"
 #include "DialingNumberState.hpp"
+#include "ReceivingCallState.hpp"
 
 namespace ue
 {
@@ -42,6 +43,11 @@ void ConnectedState::onDeclineClicked()
 void ConnectedState::handleFailedSms()
 {
     context.user.getSmsDB().markLastAsFailed();
+}
+
+void ConnectedState::handleCallRequest(common::PhoneNumber number)
+{
+    context.setState<ReceivingCallState>(number);
 }
 
 void ConnectedState::handleDisconnected()

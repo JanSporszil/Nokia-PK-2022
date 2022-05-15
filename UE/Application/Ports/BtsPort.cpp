@@ -75,9 +75,21 @@ void BtsPort::handleMessage(BinaryMessage msg)
             {
                 handler->handleFailedSms();
             }
+
             if(failedMessageId == common::MessageId::CallRequest)
             {
                 handler->handleUnknownCallNumber();
+            }
+
+            if(failedMessageId == common::MessageId::CallAccepted)
+            {
+                handler->handleUnknownCallAccept();
+            }
+
+            if(failedMessageId == common::MessageId::CallDropped)
+            {
+                //UE should ignore this message
+                logger.logInfo("Received CallDropped with unknown number");
             }
             break;
         }
@@ -89,6 +101,23 @@ void BtsPort::handleMessage(BinaryMessage msg)
         case common::MessageId::CallAccepted:
         {
             handler->handleCallAccepted();
+            break;
+        }
+        case common::MessageId::CallRequest:
+        {
+            uint8_t mode = reader.readNumber<std::uint8_t>();
+
+            if (mode == 0)
+            {
+                handler->handleCallRequest(from);
+            }
+
+            else
+            {
+                /* TODO */
+                logger.logError("Received unknown CALL mode", mode);
+            }
+
             break;
         }
         default:
@@ -155,10 +184,21 @@ common::PhoneNumber BtsPort::getMyPhoneNumber()
 
 void BtsPort::sendDropCall(common::PhoneNumber to)
 {
-    logger.logDebug("sending drop call: ", to);
+    logger.logDebug("Sending drop call: ", to);
     common::OutgoingMessage msg{common::MessageId::CallDropped,
                                 phoneNumber,
                                 to};
+    transport.sendMessage(msg.getMessage());
+}
+
+void BtsPort::sendCallAccepted(common::PhoneNumber to)
+{
+    logger.logDebug("Sending call accepted: ", to);
+    common::OutgoingMessage msg{common::MessageId::CallAccepted,
+                                phoneNumber,
+                                to};
+
+    msg.writeNumber( static_cast<uint8_t>(0));
     transport.sendMessage(msg.getMessage());
 }
 

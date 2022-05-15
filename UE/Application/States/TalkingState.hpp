@@ -1,7 +1,7 @@
 #pragma once
 
 #include "AbstractCallingState.hpp"
-#include "UeGui/ITextMode.hpp"
+#include "UeGui/ICallMode.hpp"
 
 namespace ue
 {
