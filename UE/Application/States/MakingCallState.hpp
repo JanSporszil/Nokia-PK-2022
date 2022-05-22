@@ -17,6 +17,7 @@ protected:
     void handleUnknownCallNumber() override;
     void handleTimeout() override;
     void handleCallAccepted() override;
+    void handleCallRequest(common::PhoneNumber) override;
 
 public:
     MakingCallState(Context& context, common::PhoneNumber phoneNumber);

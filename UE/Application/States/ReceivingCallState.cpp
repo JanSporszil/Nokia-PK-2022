@@ -38,4 +38,11 @@ void ReceivingCallState::handleUnknownCallAccept()
     context.timer.stopTimer();
 }
 
+void ReceivingCallState::handleCallRequest(common::PhoneNumber from)
+{
+    if (from != phoneNumber) {
+        context.bts.sendDropCall(from);
+    }
+}
+
 }

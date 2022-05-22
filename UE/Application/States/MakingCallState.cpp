@@ -1,6 +1,7 @@
 #include "AbstractCallingState.hpp"
 #include "MakingCallState.hpp"
 #include "TalkingState.hpp"
+#include "ReceivingCallState.hpp"
 
 namespace ue
 {
@@ -40,6 +41,13 @@ void MakingCallState::handleCallAccepted()
 {
     context.timer.stopTimer();
     context.setState<TalkingState>(phoneNumber);
+}
+
+void MakingCallState::handleCallRequest(common::PhoneNumber from)
+{
+    context.timer.stopTimer();
+    context.bts.sendDropCall(phoneNumber);
+    context.setState<ReceivingCallState>(from);
 }
 
 }

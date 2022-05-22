@@ -48,4 +48,11 @@ void TalkingState::handleTimeout()
     context.setState<ConnectedState>();
 }
 
+void TalkingState::handleCallRequest(common::PhoneNumber from)
+{
+    if (from != phoneNumber) {
+        context.bts.sendDropCall(from);
+    }
+}
+
 }

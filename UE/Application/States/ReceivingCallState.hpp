@@ -16,6 +16,7 @@ protected:
     void onDeclineClicked() override;
     void handleTimeout() override;
     void handleUnknownCallAccept() override;
+    void handleCallRequest(common::PhoneNumber) override;
 
 public:
     ReceivingCallState(Context& context, common::PhoneNumber phoneNumber);

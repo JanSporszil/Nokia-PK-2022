@@ -17,6 +17,7 @@ protected:
     void onDeclineClicked() override;
     void handleCallTalkReceive(const std::string&, common::PhoneNumber) override;
     void handleTimeout() override;
+    void handleCallRequest(common::PhoneNumber) override;
 
 public:
     TalkingState(Context& context, common::PhoneNumber phoneNumber);
