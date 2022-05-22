@@ -26,6 +26,9 @@ public:
 
 private:
     void handleMessage(BinaryMessage msg);
+    void xorMessage(std::string& message, uint8_t key);
+    void cesarEncryptMessage(std::string& message, uint8_t key);
+    void cesarDecryptMessage(std::string& message, uint8_t key);
 
     common::PrefixedLogger logger;
     common::ITransport& transport;
