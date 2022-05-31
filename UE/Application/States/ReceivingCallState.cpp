@@ -11,6 +11,7 @@ ReceivingCallState::ReceivingCallState(Context &context, common::PhoneNumber pho
     alertMode.setText("Incoming call from " + common::to_string(phoneNumber) + "...");
     using namespace std::chrono_literals;
     context.timer.startTimer(60s);
+
     context.user.setCloseGuard([&](){
         context.bts.sendDropCall(this->phoneNumber);
         context.setState<ClosingState>();

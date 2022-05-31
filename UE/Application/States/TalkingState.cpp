@@ -1,5 +1,6 @@
 #include "AbstractCallingState.hpp"
 #include "TalkingState.hpp"
+#include "ClosingState.hpp"
 
 namespace ue
 {
@@ -12,6 +13,12 @@ TalkingState::TalkingState(Context &context, common::PhoneNumber phoneNumber)
     callMode.appendIncomingText("Connected with " + common::to_string(phoneNumber));
 
     resetTimer();
+
+    context.user.setCloseGuard([&](){
+        context.bts.sendDropCall(this->phoneNumber);
+        context.setState<ClosingState>();
+        return false;
+    });
 }
 
 void TalkingState::resetTimer()
