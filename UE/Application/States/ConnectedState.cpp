@@ -57,7 +57,7 @@ void ConnectedState::handleDisconnected()
 
 void ConnectedState::handleSMSReceive(uint8_t mode, std::string content, common::PhoneNumber from, common::PhoneNumber to)
 {
-    context.user.getSmsDB().addSmsToDB(content, from, to);
+    context.user.getSmsDB().addSmsToDB(content, from, to, true);
 }
 
 

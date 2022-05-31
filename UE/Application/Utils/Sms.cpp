@@ -10,6 +10,16 @@ void Sms::markAsViewed()
     viewed = true;
 }
 
+bool Sms::isFailed() const
+{
+    return failed;
+}
+
+bool Sms::isViewed() const
+{
+    return viewed;
+}
+
 void Sms::markAsFailed()
 {
     failed = true;
