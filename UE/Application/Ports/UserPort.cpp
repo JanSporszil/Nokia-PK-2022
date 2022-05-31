@@ -83,6 +83,11 @@ void UserPort::setRejectCallback(IUeGui::Callback rejectCallback)
     gui.setRejectCallback(rejectCallback);
 }
 
+void UserPort::setCloseGuard(IUeGui::CloseGuard closeGuard)
+{
+    gui.setCloseGuard(closeGuard);
+}
+
 void UserPort::showSmsList()
 {
     viewSmsList();
