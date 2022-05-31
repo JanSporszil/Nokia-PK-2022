@@ -13,6 +13,7 @@ AbstractCallingState::AbstractCallingState(Context &context)
 
 void AbstractCallingState::handleCallDrop()
 {
+    context.timer.stopTimer();
     context.setState<ConnectedState>();
 }
 

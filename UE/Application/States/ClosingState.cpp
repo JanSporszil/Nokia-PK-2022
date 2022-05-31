@@ -4,6 +4,7 @@
 ue::ClosingState::ClosingState(Context &context)
     : BaseState(context, "ClosingState")
 {
+    context.user.setCloseGuard([](){return false;});
     context.user.showAlertMode().setText("Closing...");
     using namespace std::chrono_literals;
     context.timer.startTimer(1s);

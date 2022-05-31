@@ -34,6 +34,7 @@ void MakingCallState::handleUnknownCallNumber()
 
 void MakingCallState::handleTimeout()
 {
+    context.bts.sendDropCall(phoneNumber);
     context.setState<ConnectedState>();
 }
 
