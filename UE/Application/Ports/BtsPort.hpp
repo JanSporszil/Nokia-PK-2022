@@ -29,12 +29,14 @@ private:
     void xorMessage(std::string& message, uint8_t key);
     void cesarEncryptMessage(std::string& message, uint8_t key);
     void cesarDecryptMessage(std::string& message, uint8_t key);
-
+    uint8_t getRandomNumber();
     common::PrefixedLogger logger;
     common::ITransport& transport;
     common::PhoneNumber phoneNumber;
-
+    const uint8_t PROPOSED_ENCRYPTION_MODE = 0;
     IBtsEventsHandler* handler = nullptr;
+    uint8_t callEncryptionMode = 0;
+    uint8_t callEncryptionKey = 0;
 };
 
 }

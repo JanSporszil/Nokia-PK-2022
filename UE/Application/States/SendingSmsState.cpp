@@ -15,7 +15,7 @@ void SendingSmsState::onAcceptClicked()
     std::string content = composeMode.getSmsText();
     common::PhoneNumber numberTo = composeMode.getPhoneNumber();
 
-    context.user.getSmsDB().addSmsToDB(content, context.bts.getMyPhoneNumber(), numberTo);
+    context.user.getSmsDB().addSmsToDB(content, context.bts.getMyPhoneNumber(), numberTo, true);
     context.bts.sendSms(numberTo, content, 0);
     context.setState<ConnectedState>();
 
