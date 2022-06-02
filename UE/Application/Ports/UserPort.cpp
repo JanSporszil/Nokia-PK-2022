@@ -37,10 +37,22 @@ void UserPort::showConnected()
 {
     IUeGui::IListViewMode& menu = gui.setListViewMode();
     menu.clearSelectionList();
-    menu.addSelectionListItem("Compose SMS", "");
-    menu.addSelectionListItem("View SMS", "");
-    menu.addSelectionListItem("Call", "");
-    gui.setAcceptCallback(std::bind(&UserPort::onAcceptClickedWhenMenuActivated, this, std::ref(menu)));
+    for(int i = 0; i < UNKNOWN; i++)
+    {
+        if(i == COMPOSE_SMS)
+        {
+            menu.addSelectionListItem("Compose SMS", "");
+        }
+        else if(i == VIEW_SMS)
+        {
+            menu.addSelectionListItem("View SMS", "");
+        }
+        else if(i == CALL)
+        {
+            menu.addSelectionListItem("Call", "");
+        }
+    }
+    gui.setAcceptCallback([&menu, this](){this->onAcceptClickedWhenMenuActivated(menu);});
 }
 
 void UserPort::viewSmsList()
@@ -61,8 +73,7 @@ void UserPort::viewSmsList()
 
         menu.addSelectionListItem(prefix + sms.getTitle(), sms.getContent());
     }
-
-    gui.setAcceptCallback(std::bind(&UserPort::onAcceptClickedWhenMenuActivated, this, std::ref(menu)));
+    gui.setAcceptCallback([&menu, this](){this->onAcceptClickedWhenMenuActivated(menu);});
 }
 
 SmsDB &UserPort::getSmsDB()

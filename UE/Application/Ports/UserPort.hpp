@@ -32,7 +32,13 @@ public:
     IUeGui::IDialMode& showDialMode() override;
     IUeGui::ICallMode& showCallMode() override;
     IUeGui::ITextMode& showAlertMode() override;
-
+    enum MenuList
+    {
+        COMPOSE_SMS = 0,
+        VIEW_SMS,
+        CALL,
+        UNKNOWN
+    };
 private:
     common::PrefixedLogger logger;
     IUeGui& gui;

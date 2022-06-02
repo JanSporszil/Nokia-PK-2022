@@ -5,15 +5,15 @@
 #include "IUeGui.hpp"
 #include "DialingNumberState.hpp"
 #include "ReceivingCallState.hpp"
-
+#include "Ports/UserPort.hpp"
 namespace ue
 {
 
 ConnectedState::ConnectedState(Context &context)
     : BaseState(context, "ConnectedState")
 {
-    context.user.setAcceptCallback(std::bind(&ConnectedState::onAcceptClicked, this));
-    context.user.setRejectCallback(std::bind(&ConnectedState::onDeclineClicked, this));
+    context.user.setAcceptCallback([this](){this->onAcceptClicked();});
+    context.user.setRejectCallback([this](){this->onDeclineClicked();});
     context.user.showConnected();
 }
 
@@ -21,15 +21,15 @@ void ConnectedState::onAcceptClicked()
 {
     int currentMenuIndex = context.user.getCurrentMenuIndex();
 
-    if (currentMenuIndex == 0)
+    if (currentMenuIndex == UserPort::MenuList::COMPOSE_SMS)
     {
         context.setState<SendingSmsState>();
     }
-    else if (currentMenuIndex == 1)
+    else if (currentMenuIndex == UserPort::MenuList::VIEW_SMS)
     {
         context.setState<ViewSmsListState>();
     }
-    else if (currentMenuIndex == 2)
+    else if (currentMenuIndex == UserPort::MenuList::CALL)
     {
         context.setState<DialingNumberState>();
     }
@@ -55,7 +55,7 @@ void ConnectedState::handleDisconnected()
     context.setState<NotConnectedState>();
 }
 
-void ConnectedState::handleSMSReceive(uint8_t mode, std::string content, common::PhoneNumber from, common::PhoneNumber to)
+void ConnectedState::handleSMSReceive(const std::string &content, common::PhoneNumber from, common::PhoneNumber to)
 {
     context.user.getSmsDB().addSmsToDB(content, from, to, false);
 }

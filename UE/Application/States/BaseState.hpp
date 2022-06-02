@@ -20,7 +20,7 @@ public:
     void handleAttachAccept() override;
     void handleAttachReject() override;
     void handleDisconnected() override;
-    void handleSMSReceive(uint8_t mode, std::string content, common::PhoneNumber from, common::PhoneNumber to) override;
+    void handleSMSReceive(const std::string &content, common::PhoneNumber from, common::PhoneNumber to) override;
     void handleFailedSms() override;
     void handleCallDrop() override;
     void handleUnknownCallNumber() override;
