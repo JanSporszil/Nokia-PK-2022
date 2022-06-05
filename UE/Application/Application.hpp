@@ -13,6 +13,7 @@ using common::ILogger;
 
 class Application : public IEventsHandler
 {
+    friend class ApplicationTestSuite;
 public:
     Application(PhoneNumber phoneNumber,
                 ILogger& iLogger,

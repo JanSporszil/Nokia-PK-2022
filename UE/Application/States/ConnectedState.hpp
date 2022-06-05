@@ -7,6 +7,7 @@ namespace ue
 
 class ConnectedState : public BaseState
 {
+    friend class ApplicationTestSuite;
 public:
     ConnectedState(Context& context);
 protected:
