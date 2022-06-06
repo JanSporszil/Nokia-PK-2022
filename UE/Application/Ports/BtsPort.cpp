@@ -61,6 +61,22 @@ void BtsPort::handleMessage(BinaryMessage msg)
                 handler->handleSMSReceive(mode, content, from, to);
             }
 
+            else if (mode == 1)
+            {
+                uint8_t key = reader.readNumber<std::uint8_t>();
+                std::string content = reader.readRemainingText();
+                xorMessage(content, key);
+                handler->handleSMSReceive(mode, content, from, to);
+            }
+
+            else if (mode == 2)
+            {
+                uint8_t key = reader.readNumber<std::uint8_t>();
+                std::string content = reader.readRemainingText();
+                cesarDecryptMessage(content, key);
+                handler->handleSMSReceive(mode, content, from, to);
+            }
+
             else
             {
                 /* TODO */
@@ -138,6 +154,27 @@ void BtsPort::handleMessage(BinaryMessage msg)
     }
 }
 
+void BtsPort::xorMessage(std::string &message, uint8_t key)
+{
+    for (auto& ch : message) {
+        ch ^= key;
+    }
+}
+
+void BtsPort::cesarEncryptMessage(std::string &message, uint8_t key)
+{
+    for (auto& ch : message) {
+        ch += key;
+    }
+}
+
+void BtsPort::cesarDecryptMessage(std::string &message, uint8_t key)
+{
+    for (auto& ch : message) {
+        ch -= key;
+    }
+}
+
 
 void BtsPort::sendAttachRequest(common::BtsId btsId)
 {
@@ -164,6 +201,20 @@ void BtsPort::sendSms(common::PhoneNumber to, std::string message, int mode)
             msg.writeText(message);
         }
         break;
+    case 1:
+    {
+        msg.writeNumber(static_cast<uint8_t>(55));
+        xorMessage(message, 55);
+        msg.writeText(message);
+        break;
+    }
+    case 2:
+    {
+        msg.writeNumber(static_cast<uint8_t>(155));
+        cesarEncryptMessage(message, 155);
+        msg.writeText(message);
+        break;
+    }
     default:
         {
         logger.logError("Sending sms: unknown mode");
