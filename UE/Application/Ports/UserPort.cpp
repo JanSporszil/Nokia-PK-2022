@@ -49,7 +49,17 @@ void UserPort::viewSmsList()
     menu.clearSelectionList();
     for (auto& sms : smsDB.getSmsList())
     {
-        menu.addSelectionListItem(sms.getTitle(), "");
+        std::string prefix = "";
+        if( sms.isFailed() )
+        {
+            prefix = "[!] ";
+        }
+        else if( !sms.isViewed() )
+        {
+            prefix = "[*] ";
+        }
+
+        menu.addSelectionListItem(prefix + sms.getTitle(), sms.getContent());
     }
 
     gui.setAcceptCallback(std::bind(&UserPort::onAcceptClickedWhenMenuActivated, this, std::ref(menu)));
@@ -81,6 +91,11 @@ void UserPort::setAcceptCallback(IUeGui::Callback acceptCallback)
 void UserPort::setRejectCallback(IUeGui::Callback rejectCallback)
 {
     gui.setRejectCallback(rejectCallback);
+}
+
+void UserPort::setCloseGuard(IUeGui::CloseGuard closeGuard)
+{
+    gui.setCloseGuard(closeGuard);
 }
 
 void UserPort::showSmsList()

@@ -20,6 +20,7 @@ protected:
 
 public:
     ReceivingCallState(Context& context, common::PhoneNumber phoneNumber);
+//    virtual ~ReceivingCallState();
 };
 
 }

@@ -32,6 +32,7 @@ public:
     MOCK_METHOD(int, getCurrentMenuIndex, (), (final));
     MOCK_METHOD(void, setAcceptCallback, (IUeGui::Callback), (final));
     MOCK_METHOD(void, setRejectCallback, (IUeGui::Callback), (final));
+    MOCK_METHOD(void, setCloseGuard, (IUeGui::CloseGuard), (final));
     MOCK_METHOD(IUeGui::ISmsComposeMode&, showComposeSms, (), (final));
     MOCK_METHOD(IUeGui::IDialMode&, showDialMode, (), (final));
     MOCK_METHOD(IUeGui::ICallMode&, showCallMode, (), (final));

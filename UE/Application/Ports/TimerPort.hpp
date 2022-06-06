@@ -2,6 +2,7 @@
 
 #include "ITimerPort.hpp"
 #include "Logger/PrefixedLogger.hpp"
+#include <thread>
 
 namespace ue
 {
@@ -19,6 +20,8 @@ public:
     void stopTimer() override;
 
 private:
+    bool m_started = false;
+    std::thread m_thread;
     common::PrefixedLogger logger;
     ITimerEventsHandler* handler = nullptr;
 };

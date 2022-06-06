@@ -27,6 +27,7 @@ public:
     void clearCallMode() override;
     void setAcceptCallback(IUeGui::Callback acceptCallback) override;
     void setRejectCallback(IUeGui::Callback rejectCallback) override;
+    void setCloseGuard(IUeGui::CloseGuard closeGuard) override;
     IUeGui::ISmsComposeMode& showComposeSms() override;
     IUeGui::IDialMode& showDialMode() override;
     IUeGui::ICallMode& showCallMode() override;

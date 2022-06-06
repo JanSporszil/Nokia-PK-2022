@@ -8,6 +8,7 @@ BaseState::BaseState(Context &context, const std::string &name)
       logger(context.logger, "[" + name + "]")
 {
     logger.logDebug("entry");
+    context.user.setCloseGuard( [](){return true;});
 }
 
 BaseState::~BaseState()
