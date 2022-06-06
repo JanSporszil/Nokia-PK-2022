@@ -4,7 +4,7 @@ ue::SmsDB::SmsDB()
 }
 
 void ue::SmsDB::addSmsToDB(
-        std::string content,
+        const std::string &content,
         common::PhoneNumber phoneNumberFrom,
         common::PhoneNumber phoneNumberTo,
         bool viewed)

@@ -46,9 +46,9 @@ void Application::handleDisconnected()
     context.state->handleDisconnected();
 }
 
-void Application::handleSMSReceive(uint8_t mode, std::string content, common::PhoneNumber from, common::PhoneNumber to)
+void Application::handleSMSReceive(const std::string &content, common::PhoneNumber from, common::PhoneNumber to)
 {
-    context.state->handleSMSReceive(mode, content, from, to);
+    context.state->handleSMSReceive(content, from, to);
 }
 
 void Application::handleFailedSms()

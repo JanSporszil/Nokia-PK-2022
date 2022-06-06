@@ -1,6 +1,6 @@
 #include "Sms.hpp"
 
-Sms::Sms(std::string content, common::PhoneNumber phoneNumberFrom, common::PhoneNumber phoneNumberTo, bool viewed, bool failed ):
+Sms::Sms(const std::string &content, common::PhoneNumber phoneNumberFrom, common::PhoneNumber phoneNumberTo, bool viewed, bool failed ):
     content(content), from(phoneNumberFrom), to(phoneNumberTo), viewed(viewed), failed(failed)
 {
 }
@@ -30,7 +30,7 @@ const std::string &Sms::getContent() const
     return content;
 }
 
-const std::string Sms::getTitle() const
+std::string Sms::getTitle() const
 {
     return common::to_string(from) + " -> " + common::to_string(to);
 }

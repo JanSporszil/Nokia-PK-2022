@@ -13,7 +13,7 @@ protected:
     virtual void onAcceptClicked();
     virtual void onDeclineClicked();
     void handleDisconnected() override;
-    void handleSMSReceive(uint8_t mode, std::string content, common::PhoneNumber from, common::PhoneNumber to) override;
+    void handleSMSReceive(const std::string &content, common::PhoneNumber from, common::PhoneNumber to) override;
     void handleFailedSms() override;
     void handleCallRequest(common::PhoneNumber) override;
 };

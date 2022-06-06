@@ -56,26 +56,26 @@ void BtsPort::handleMessage(BinaryMessage msg)
         {
             uint8_t mode = reader.readNumber<std::uint8_t>();
 
-            if (mode == 0)
+            if (mode == NONE)
             {
                 std::string content = reader.readRemainingText();
-                handler->handleSMSReceive(mode, content, from, to);
+                handler->handleSMSReceive(content, from, to);
             }
 
-            else if (mode == 1)
+            else if (mode == XOR)
             {
                 uint8_t key = reader.readNumber<std::uint8_t>();
                 std::string content = reader.readRemainingText();
                 xorMessage(content, key);
-                handler->handleSMSReceive(mode, content, from, to);
+                handler->handleSMSReceive(content, from, to);
             }
 
-            else if (mode == 2)
+            else if (mode == CESAR)
             {
                 uint8_t key = reader.readNumber<std::uint8_t>();
                 std::string content = reader.readRemainingText();
                 cesarDecryptMessage(content, key);
-                handler->handleSMSReceive(mode, content, from, to);
+                handler->handleSMSReceive(content, from, to);
             }
 
             else
@@ -118,17 +118,29 @@ void BtsPort::handleMessage(BinaryMessage msg)
         case common::MessageId::CallAccepted:
         {
             handler->handleCallAccepted();
+
+            callEncryptionMode = reader.readNumber<std::uint8_t>();
+            if(callEncryptionMode == XOR || callEncryptionMode == CESAR)
+            {
+                callEncryptionKey = reader.readNumber<std::uint8_t>();
+            }
+            if(callEncryptionMode >= UNKNOWN)
+            {
+                /* TODO */
+                logger.logError("Received unknown CALL mode", callEncryptionMode);
+            }
             break;
         }
         case common::MessageId::CallRequest:
         {
-            callEncryptionMode = reader.readNumber<std::uint8_t>();
             handler->handleCallRequest(from);
-            if(callEncryptionMode == 1 || callEncryptionMode == 2)
+
+            callEncryptionMode = reader.readNumber<std::uint8_t>();
+            if(callEncryptionMode == XOR || callEncryptionMode == CESAR)
             {
                 callEncryptionKey = reader.readNumber<std::uint8_t>();
             }
-            if(callEncryptionMode > 2)
+            if(callEncryptionMode >= UNKNOWN)
             {
                 /* TODO */
                 logger.logError("Received unknown CALL mode", callEncryptionMode);
@@ -139,11 +151,11 @@ void BtsPort::handleMessage(BinaryMessage msg)
         case common::MessageId::CallTalk:
         {
             std::string content = reader.readRemainingText();
-            if(callEncryptionMode == 1)
+            if(callEncryptionMode == XOR)
             {
                 xorMessage(content, callEncryptionKey);
             }
-            else if(callEncryptionMode == 2)
+            else if(callEncryptionMode == CESAR)
             {
                 cesarDecryptMessage(content, callEncryptionKey);
             }
@@ -204,33 +216,34 @@ void BtsPort::sendAttachRequest(common::BtsId btsId)
 
 }
 
-void BtsPort::sendSms(common::PhoneNumber to, std::string message, int mode)
+void BtsPort::sendSms(common::PhoneNumber to, const std::string &message)
 {
-    logger.logDebug("sending sms: ", to, message, mode);
+    std::string messageToSend = message;
+    logger.logDebug("sending sms: ", to, messageToSend, PROPOSED_ENCRYPTION_MODE);
     common::OutgoingMessage msg{common::MessageId::Sms,
                                 phoneNumber,
                                 to};
-    msg.writeNumber( static_cast<uint8_t>(mode));
-    switch (mode) {
-    case 0:
+    msg.writeNumber( static_cast<uint8_t>(PROPOSED_ENCRYPTION_MODE));
+    switch (PROPOSED_ENCRYPTION_MODE) {
+    case NONE:
         {
-            msg.writeText(message);
+            msg.writeText(messageToSend);
         }
         break;
-    case 1:
+    case XOR:
     {
         uint8_t randomKey = getRandomNumber();
         msg.writeNumber(static_cast<uint8_t>(randomKey));
-        xorMessage(message, randomKey);
-        msg.writeText(message);
+        xorMessage(messageToSend, randomKey);
+        msg.writeText(messageToSend);
         break;
     }
-    case 2:
+    case CESAR:
     {
         uint8_t randomKey = getRandomNumber();
         msg.writeNumber(static_cast<uint8_t>(randomKey));
-        cesarEncryptMessage(message, randomKey);
-        msg.writeText(message);
+        cesarEncryptMessage(messageToSend, randomKey);
+        msg.writeText(messageToSend);
         break;
     }
     default:
@@ -251,7 +264,7 @@ void BtsPort::sendCallRequest(common::PhoneNumber to)
                                 phoneNumber,
                                 to};
     msg.writeNumber( static_cast<uint8_t>(callEncryptionMode));
-    if(callEncryptionMode == 1 || callEncryptionMode == 2)
+    if(callEncryptionMode == XOR || callEncryptionMode == CESAR)
     {
         callEncryptionKey = getRandomNumber();
         msg.writeNumber( static_cast<uint8_t>(callEncryptionKey));
@@ -279,8 +292,11 @@ void BtsPort::sendCallAccepted(common::PhoneNumber to)
     common::OutgoingMessage msg{common::MessageId::CallAccepted,
                                 phoneNumber,
                                 to};
-
-    msg.writeNumber( static_cast<uint8_t>(0));
+    msg.writeNumber( static_cast<uint8_t>(callEncryptionMode));
+    if(callEncryptionMode == XOR || callEncryptionMode == CESAR)
+    {
+        msg.writeNumber( static_cast<uint8_t>(callEncryptionKey));
+    }
     transport.sendMessage(msg.getMessage());
 }
 
@@ -291,11 +307,11 @@ void BtsPort::sendCallTalk(const std::string & content, common::PhoneNumber to)
                                 phoneNumber,
                                 to};
     std::string messageToSend = content;
-    if(callEncryptionMode == 1)
+    if(callEncryptionMode == XOR)
     {
         xorMessage(messageToSend, callEncryptionKey);
     }
-    else if(callEncryptionMode == 2)
+    else if(callEncryptionMode == CESAR)
     {
         cesarEncryptMessage(messageToSend, callEncryptionKey);
     }
