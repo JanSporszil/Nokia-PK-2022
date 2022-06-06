@@ -34,6 +34,9 @@ public:
     void handleCallDrop() override;
     void handleUnknownCallNumber() override;
     void handleCallAccepted() override;
+    void handleCallRequest(common::PhoneNumber) override;
+    void handleUnknownCallAccept() override;
+    void handleCallTalkReceive(const std::string&, common::PhoneNumber) override;
 
 private:
     Context context;

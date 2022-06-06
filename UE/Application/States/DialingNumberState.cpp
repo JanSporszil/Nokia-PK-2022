@@ -8,7 +8,6 @@ namespace ue
 DialingNumberState::DialingNumberState(Context &context)
     : ConnectedState(context), dialMode(context.user.showDialMode())
 {
-
 }
 
 void DialingNumberState::onAcceptClicked()

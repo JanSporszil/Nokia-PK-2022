@@ -27,6 +27,7 @@ public:
     MOCK_METHOD(void, viewSmsList, (), (final));
     MOCK_METHOD(void, showSmsList, (), (final));
     MOCK_METHOD(void, showSms, (int), (final));
+    MOCK_METHOD(void, clearCallMode, (), (final));
     MOCK_METHOD(SmsDB&, getSmsDB, (), (final));
     MOCK_METHOD(int, getCurrentMenuIndex, (), (final));
     MOCK_METHOD(void, setAcceptCallback, (IUeGui::Callback), (final));

@@ -71,5 +71,20 @@ void Application::handleCallAccepted()
     context.state->handleCallAccepted();
 }
 
+void Application::handleCallRequest(common::PhoneNumber number)
+{
+    context.state->handleCallRequest(number);
+}
+
+void Application::handleUnknownCallAccept()
+{
+    context.state->handleUnknownCallAccept();
+}
+
+void Application::handleCallTalkReceive(const std::string& content, common::PhoneNumber from)
+{
+    context.state->handleCallTalkReceive(content, from);
+}
+
 
 }

@@ -6,7 +6,7 @@
 namespace ue
 {
 
-class MakingCallState : public AbstractCallingState
+class ReceivingCallState : public AbstractCallingState
 {
 private:
     IUeGui::ITextMode& alertMode;
@@ -14,13 +14,12 @@ private:
 protected:
     void onAcceptClicked() override;
     void onDeclineClicked() override;
-    void handleUnknownCallNumber() override;
     void handleTimeout() override;
-    void handleCallAccepted() override;
+    void handleUnknownCallAccept() override;
     void handleCallRequest(common::PhoneNumber) override;
 
 public:
-    MakingCallState(Context& context, common::PhoneNumber phoneNumber);
+    ReceivingCallState(Context& context, common::PhoneNumber phoneNumber);
 };
 
 }
