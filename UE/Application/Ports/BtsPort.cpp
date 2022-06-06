@@ -1,6 +1,7 @@
 #include "BtsPort.hpp"
 #include "Messages/IncomingMessage.hpp"
 #include "Messages/OutgoingMessage.hpp"
+#include <random>
 
 namespace ue
 {
@@ -121,27 +122,34 @@ void BtsPort::handleMessage(BinaryMessage msg)
         }
         case common::MessageId::CallRequest:
         {
-            uint8_t mode = reader.readNumber<std::uint8_t>();
-
-            if (mode == 0)
+            callEncryptionMode = reader.readNumber<std::uint8_t>();
+            handler->handleCallRequest(from);
+            if(callEncryptionMode == 1 || callEncryptionMode == 2)
             {
-                handler->handleCallRequest(from);
+                callEncryptionKey = reader.readNumber<std::uint8_t>();
             }
-
-            else
+            if(callEncryptionMode > 2)
             {
                 /* TODO */
-                logger.logError("Received unknown CALL mode", mode);
+                logger.logError("Received unknown CALL mode", callEncryptionMode);
             }
-
             break;
         }
 
         case common::MessageId::CallTalk:
         {
             std::string content = reader.readRemainingText();
+            if(callEncryptionMode == 1)
+            {
+                xorMessage(content, callEncryptionKey);
+            }
+            else if(callEncryptionMode == 2)
+            {
+                cesarDecryptMessage(content, callEncryptionKey);
+            }
             handler->handleCallTalkReceive(content, from);
             break;
+
         }
         default:
             logger.logError("unknow message: ", msgId, ", from: ", from);
@@ -175,6 +183,14 @@ void BtsPort::cesarDecryptMessage(std::string &message, uint8_t key)
     }
 }
 
+uint8_t BtsPort::getRandomNumber()
+{
+    std::random_device rd;
+    std::mt19937 mt(rd());
+    std::uniform_int_distribution<uint8_t> dist(1, 255);
+    return dist(mt);
+}
+
 
 void BtsPort::sendAttachRequest(common::BtsId btsId)
 {
@@ -203,15 +219,17 @@ void BtsPort::sendSms(common::PhoneNumber to, std::string message, int mode)
         break;
     case 1:
     {
-        msg.writeNumber(static_cast<uint8_t>(55));
-        xorMessage(message, 55);
+        uint8_t randomKey = getRandomNumber();
+        msg.writeNumber(static_cast<uint8_t>(randomKey));
+        xorMessage(message, randomKey);
         msg.writeText(message);
         break;
     }
     case 2:
     {
-        msg.writeNumber(static_cast<uint8_t>(155));
-        cesarEncryptMessage(message, 155);
+        uint8_t randomKey = getRandomNumber();
+        msg.writeNumber(static_cast<uint8_t>(randomKey));
+        cesarEncryptMessage(message, randomKey);
         msg.writeText(message);
         break;
     }
@@ -227,11 +245,17 @@ void BtsPort::sendSms(common::PhoneNumber to, std::string message, int mode)
 
 void BtsPort::sendCallRequest(common::PhoneNumber to)
 {
+    callEncryptionMode = PROPOSED_ENCRYPTION_MODE;
     logger.logDebug("sending call request: ", to);
     common::OutgoingMessage msg{common::MessageId::CallRequest,
                                 phoneNumber,
                                 to};
-    msg.writeNumber( static_cast<uint8_t>(0));
+    msg.writeNumber( static_cast<uint8_t>(callEncryptionMode));
+    if(callEncryptionMode == 1 || callEncryptionMode == 2)
+    {
+        callEncryptionKey = getRandomNumber();
+        msg.writeNumber( static_cast<uint8_t>(callEncryptionKey));
+    }
     transport.sendMessage(msg.getMessage());
 }
 
@@ -266,8 +290,16 @@ void BtsPort::sendCallTalk(const std::string & content, common::PhoneNumber to)
     common::OutgoingMessage msg{common::MessageId::CallTalk,
                                 phoneNumber,
                                 to};
-
-    msg.writeText(content);
+    std::string messageToSend = content;
+    if(callEncryptionMode == 1)
+    {
+        xorMessage(messageToSend, callEncryptionKey);
+    }
+    else if(callEncryptionMode == 2)
+    {
+        cesarEncryptMessage(messageToSend, callEncryptionKey);
+    }
+    msg.writeText(messageToSend);
     transport.sendMessage(msg.getMessage());
 }
 
